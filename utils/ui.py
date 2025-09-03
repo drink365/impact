@@ -3,19 +3,18 @@ import os
 import streamlit as st
 
 def brand_header(subtitle: str = ""):
-    """Render a consistent brand header with logo and subtitle on every page."""
-    cols = st.columns([0.18, 0.82])
+    cols = st.columns([0.16, 0.84])
     with cols[0]:
         if os.path.exists("logo.png"):
             st.image("logo.png", use_column_width=True)
         else:
-            st.markdown("### 🏛️ 影響力傳承平台")
+            st.empty()
     with cols[1]:
         st.markdown(
             f"""
             <div style="padding-top:8px">
-              <h1 style="margin-bottom:0">影響力傳承平台｜永傳家族辦公室</h1>
-              <p style="margin-top:6px; opacity:.85">{subtitle}</p>
+              <h1 style="margin:0">影響力傳承平台｜永傳家族辦公室</h1>
+              <p style="margin:6px 0 0 0; opacity:.85">{subtitle}</p>
             </div>
             """,
             unsafe_allow_html=True

@@ -30,19 +30,15 @@ def _font_name():
 def _paint_header_footer(c, font_name, footer_text):
     width, height = A4
     brand = HexColor("#0f766e")
-    # header bar
     c.setFillColor(brand); c.rect(0, height-70, width, 70, fill=1, stroke=0)
-    # logo
     logo = _choose(LOGO_CANDIDATES)
     if logo:
         try:
             c.drawImage(ImageReader(logo), 35, height-62, width=120, height=48, mask='auto')
         except Exception:
             pass
-    # header right title
     c.setFont(font_name, 13); c.setFillColor(HexColor("#ffffff"))
-    c.drawRightString(width-35, height-42, "影響力傳承平台 | 永傳家族辦公室")
-    # footer
+    c.drawRightString(width-35, height-42, "影響力傳承平台｜永傳家族辦公室")
     c.setFont(font_name, 9); c.setFillColor(HexColor("#666666"))
     c.drawRightString(width-35, 22, footer_text)
 
@@ -53,19 +49,16 @@ def build_report(title, subtitle, summary_text, advisor_actions, tables, images,
     c = canvas.Canvas(buf, pagesize=A4)
     width, height = A4
 
-    # Cover
     _paint_header_footer(c, font_name, footer_text)
     c.setFillColor(HexColor("#111111")); c.setFont(font_name, 20)
     c.drawString(40, height-110, title or "")
     c.setFont(font_name, 13); c.drawString(40, height-132, subtitle or "")
     c.setFont(font_name, 11); c.setFillColor(HexColor("#444444"))
     c.drawString(40, height-154, datetime.now().strftime("%Y-%m-%d"))
-    # intro text
     c.setFillColor(HexColor("#222222")); c.setFont(font_name, 11)
     t = c.beginText(40, height-185); t.textLines(summary_text or "（無）"); c.drawText(t)
     c.showPage()
 
-    # Images pages
     if images:
         for ttitle, png in images:
             _paint_header_footer(c, font_name, footer_text)
@@ -82,7 +75,6 @@ def build_report(title, subtitle, summary_text, advisor_actions, tables, images,
                 pass
             c.showPage()
 
-    # Tables & actions
     _paint_header_footer(c, font_name, footer_text)
     y = height-110
     c.setFillColor(HexColor("#111111"))

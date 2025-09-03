@@ -1,3 +1,4 @@
+
 import streamlit as st
 from utils.ui import brand_header
 
@@ -7,9 +8,8 @@ st.set_page_config(
     layout="wide",
 )
 
-# --------- Global Style ---------
 st.markdown(
-    '''
+    """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap');
     html, body, [class*="css"]  {
@@ -17,20 +17,16 @@ st.markdown(
                      Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',
                      'Helvetica Neue', Arial, 'Microsoft JhengHei', 'Noto Sans CJK TC', sans-serif;
     }
-    .hero {
-        padding: 2rem;
-        border-radius: 18px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-    }
+    .hero { padding: 2rem; border-radius: 18px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
     .muted {opacity: .85}
+    .stRadio > label { font-weight: 600; }
+    .stRadio [data-baseweb="radio"] { margin-bottom: 0.25rem; }
     </style>
-    ''',
+    """,
     unsafe_allow_html=True,
 )
 
-# --------- Header ---------
 brand_header("讓家族對話更自然，讓傳承規劃更清晰")
-st.caption("以人為本｜情感 × 風險 × 信任｜陪您把重要的事說清楚、做紮實")
 
 with st.container():
     col1, col2 = st.columns([1.2, 1])
@@ -38,11 +34,12 @@ with st.container():
         st.markdown(
             """
             <div class="hero">
-            <h3>從「不想談」到「願意行動」：以《一如既往》的恆久原則，打造可落地的傳承工具</h3>
-            <p class="muted">本平台提供兩個入門測驗：<b>《家族影響力指數》</b> 與 <b>《傳承準備度測驗》</b>。            不先談保單與資產金額，而是先理解價值觀、角色與風險，讓每一步都更穩健。</p>
+            <h3>讓家族對話更自然，讓傳承規劃更清晰</h3>
+            <p class="muted">本平台提供兩個入門測驗：<b>家族影響力指數</b> 與 <b>傳承準備度測驗</b>。
+            在談資產與保單前，先陪伴家族理解價值觀、角色定位與潛在風險，讓每一步更安心、更有方向。</p>
             <ul>
               <li>匿名作答，三分鐘完成</li>
-              <li>即時產出雷達圖與風險熱點</li>
+              <li>即時產出雷達圖與風險熱力圖</li>
               <li>可下載 CSV / 圖像，用於家族會議</li>
             </ul>
             </div>
@@ -50,10 +47,7 @@ with st.container():
             unsafe_allow_html=True
         )
     with col2:
-        st.info(
-            "**隱私聲明**：本平台預設不儲存個資與作答內容。"
-            " 如需建立專屬帳號或雲端保存，請在諮詢時另行開啟。"
-        )
+        st.info("**隱私聲明**：本平台預設不儲存個資與作答內容。如需建立專屬帳號或雲端保存，請在諮詢時另行開啟。")
 
 st.divider()
 st.subheader("📌 建議使用方式")
@@ -69,9 +63,9 @@ colA, colB, colC = st.columns(3)
 with colA:
     st.page_link("pages/01_家族影響力指數.py", label="開始：《家族影響力指數》", icon="➡️")
 with colB:
-    st.page_link("pages/02_傳承準備度測驗.py", label="預告：《傳承準備度測驗》", icon="📋")
+    st.page_link("pages/02_傳承準備度測驗.py", label="開始：《傳承準備度測驗》", icon="📋")
 with colC:
     st.link_button("預約顧問（Email）", "mailto:123@gracefo.com?subject=預約傳承顧問&body=您好，我想預約傳承規劃諮詢。")
 
 st.divider()
-st.caption("《影響力》傳承策略平台｜永傳家族辦公室｜Email：123@gracefo.com")
+st.caption("影響力傳承平台｜永傳家族辦公室｜Email：123@gracefo.com")
