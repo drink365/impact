@@ -50,3 +50,49 @@ def interpret_scores(scores: Dict[str, Dict[str, float]]) -> str:
 
     advice.append("• 若需協助，我們可提供顧問會議與策略落地服務（Email：123@gracefo.com）。")
     return "\n".join(advice)
+
+
+# ---------------- Legacy Readiness Scoring ----------------
+from typing import List, Tuple
+
+def compute_legacy_readiness(questions: List[Tuple[str, str]], answers: List[int]):
+    """Aggregate scores by domain for the readiness assessment."""
+    domains = {}
+    for (domain, _), score in zip(questions, answers):
+        bucket = domains.setdefault(domain, {"sum": 0, "cnt": 0})
+        bucket["sum"] += int(score)
+        bucket["cnt"] += 1
+    for d, v in domains.items():
+        v["avg"] = v["sum"] / max(1, v["cnt"])
+    # Risk levels: invert avg into risk (5 good -> 0 risk; 1 bad -> high risk)
+    risk = {d: round(5 - v["avg"], 2) for d, v in domains.items()}
+
+    # Narrative
+    high_risk = [d for d, r in risk.items() if r >= 2.0]
+    mid_risk = [d for d, r in risk.items() if 1.0 <= r < 2.0]
+    low_risk = [d for d, r in risk.items() if r < 1.0]
+
+    parts = []
+    if high_risk:
+        parts.append(f"高風險：{'、'.join(high_risk)}（建議立即安排顧問會議）")
+    if mid_risk:
+        parts.append(f"中度風險：{'、'.join(mid_risk)}（建議 30~60 天內改善）")
+    if low_risk:
+        parts.append(f"低風險：{'、'.join(low_risk)}（維持並定期檢視）")
+    summary = "；".join(parts) or "尚無資料。"
+
+    # Action suggestions
+    actions = []
+    if risk.get("資產透明度", 0) >= 1.0:
+        actions.append("• 建立最新資產清單與權屬（含跨境資產），指定維護頻率與責任人。")
+    if risk.get("稅務與合規", 0) >= 1.0:
+        actions.append("• 進行跨境稅務/申報盤點（含FBAR/CRS/遺贈稅），建立年度合規清單。")
+    if risk.get("接班計畫", 0) >= 1.0:
+        actions.append("• 設定交棒時程表與角色授權，建立家族治理/董事會會議節奏。")
+    if risk.get("保險與信託", 0) >= 1.0:
+        actions.append("• 用保單/信託打造長期現金流與風險隔離，定期壓力測試與檢核。")
+    if not actions:
+        actions.append("• 建議直接進入《傳承策略設計》與現金流模型優化，建立長期護城河。")
+    actions.append("• 需要協助？來信 123@gracefo.com 安排顧問會議。")
+
+    return domains, risk, summary, "\n".join(actions)

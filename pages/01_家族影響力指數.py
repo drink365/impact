@@ -91,10 +91,10 @@ if submitted:
         st.download_button("下載雷達圖（PNG）", data=buf.getvalue(), file_name="family_impact_radar.png", mime="image/png")
 
     with col2:
-        st.subheader("AI 觀察摘要")
+        st.subheader("AI 分析摘要")
         st.write(summary)
 
-        st.subheader("顧問建議（下一步）")
+        st.subheader("顧問下一步建議")
         st.markdown(interpret_scores(scores))
 
     st.divider()
