@@ -1,5 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+
+import matplotlib
+
+# Try to register local Noto Sans TC for Chinese labels
+try:
+    from matplotlib import font_manager
+    for p in ["NotoSansTC-Regular.ttf", "./NotoSansTC-Regular.ttf", "assets/NotoSansTC-Regular.ttf"]:
+        if os.path.exists(p):
+            font_manager.fontManager.addfont(p)
+            matplotlib.rcParams['font.family'] = 'Noto Sans TC'
+            break
+    matplotlib.rcParams['axes.unicode_minus'] = False
+except Exception:
+    pass
 
 def radar_plot(scores: dict):
     """Create a radar chart from facet scores (expects .avg in 1-5)."""
@@ -41,5 +56,5 @@ def heatmap_from_dict(risk_dict: dict):
     ax.set_xticklabels(labels, rotation=20, ha='right')
     for j, v in enumerate(values[0]):
         ax.text(j, 0, f"{v:.1f}", ha='center', va='center')
-    ax.set_title("傳承風險熱力圖（0=低風險，數值越高風險越高）")
+    ax.set_title("風險熱力圖｜0 = 低風險；數值越高風險越高")
     return fig

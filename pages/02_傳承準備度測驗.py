@@ -93,6 +93,24 @@ if go:
         st.subheader("顧問下一步建議")
         st.markdown(actions)
 
+
+        # ==== 下載 PDF 報告 ====
+        try:
+            from utils.pdf_utils import build_report
+            png_buf = io.BytesIO()
+            fig.savefig(png_buf, format="png", dpi=200, bbox_inches="tight")
+            pdf_bytes = build_report(
+                title="傳承準備度測驗｜分析報告",
+                subtitle="風險熱力圖・分數摘要・顧問下一步建議",
+                summary_text=summary,
+                advisor_actions=actions,
+                tables=[("分數與風險值", df)],
+                images=[("傳承風險熱力圖", png_buf.getvalue())],
+            )
+            st.download_button("下載 PDF 報告", data=pdf_bytes, file_name="legacy_readiness_report.pdf", mime="application/pdf", use_container_width=True)
+        except Exception as e:
+            st.warning("PDF 產生發生問題：{}。請確認已上傳字型與 logo 檔。".format(e))
+    
     st.divider()
     with st.expander("隱私與說明", expanded=False):
         st.caption("本頁面不會自動將答案上傳至雲端。若需保存或建立團隊帳號，請於諮詢時開啟。")
