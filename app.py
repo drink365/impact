@@ -61,9 +61,9 @@ st.markdown(
 
 colA, colB, colC = st.columns(3)
 with colA:
-    st.page_link("pages/01_家族影響力指數.py", label="開始：《家族影響力指數》", icon="➡️")
+    st.page_link("pages/01_family_impact.py", label="開始：《家族影響力指數》", icon="➡️")
 with colB:
-    st.page_link("pages/02_傳承準備度測驗.py", label="開始：《傳承準備度測驗》", icon="📋")
+    st.page_link("pages/02_legacy_readiness.py", label="開始：《傳承準備度測驗》", icon="📋")
 with colC:
     st.link_button("預約顧問（Email）", "mailto:123@gracefo.com?subject=預約傳承顧問&body=您好，我想預約傳承規劃諮詢。")
 
