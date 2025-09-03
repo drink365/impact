@@ -7,6 +7,7 @@ from utils.scoring import compute_legacy_readiness
 from utils.charts import heatmap_from_dict
 
 st.set_page_config(page_title="傳承準備度測驗", page_icon="logo2.png", layout="wide")
+render_sidebar_nav()
 brand_header("傳承準備度測驗（匿名作答｜約 3-4 分鐘）")
 
 QUESTIONS = [

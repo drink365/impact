@@ -7,6 +7,7 @@ from utils.scoring import compute_family_impact_scores, interpret_scores
 from utils.charts import radar_plot
 
 st.set_page_config(page_title="家族影響力指數", page_icon="logo2.png", layout="wide")
+render_sidebar_nav()
 brand_header("家族影響力指數（匿名作答｜約 3 分鐘）")
 
 QUESTIONS = [

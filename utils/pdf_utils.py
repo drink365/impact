@@ -1,5 +1,5 @@
 
-import os, io
+import os, io, pathlib, urllib.request
 from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -8,7 +8,15 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.colors import HexColor
 
-FONT_CANDIDATES = ["NotoSansTC-Regular.ttf","./NotoSansTC-Regular.ttf","assets/NotoSansTC-Regular.ttf"]
+CANDIDATE_NAMES = [
+    "NotoSansTC-Regular.ttf",
+    "NotoSansCJKtc-Regular.ttf",
+]
+DOWNLOAD_URLS = [
+    "https://github.com/googlefonts/noto-cjk/raw/main/Sans/TTF/TraditionalChinese/NotoSansTC-Regular.ttf",
+    "https://github.com/googlefonts/noto-cjk/raw/main/Sans/TTF/TraditionalChinese/NotoSansCJKtc-Regular.ttf",
+]
+
 LOGO_CANDIDATES = ["logo.png","./logo.png","assets/logo.png"]
 
 def _choose(path_list):
@@ -17,14 +25,36 @@ def _choose(path_list):
             return p
     return None
 
+def _find_or_fetch_font() -> str | None:
+    here = pathlib.Path(__file__).resolve()
+    roots = [here.parent, here.parent.parent, pathlib.Path.cwd()]
+    for r in roots:
+        for name in CANDIDATE_NAMES:
+            p = r / name
+            if p.exists():
+                return str(p)
+
+    cache_dir = pathlib.Path(".fonts")
+    cache_dir.mkdir(exist_ok=True)
+    for url in DOWNLOAD_URLS:
+        try:
+            target = cache_dir / url.split("/")[-1]
+            if not target.exists():
+                urllib.request.urlretrieve(url, target)
+            if target.exists():
+                return str(target)
+        except Exception:
+            continue
+    return None
+
 def _font_name():
-    for p in FONT_CANDIDATES:
-        if os.path.exists(p):
-            try:
-                pdfmetrics.registerFont(TTFont("NotoSansTC", p))
-                return "NotoSansTC"
-            except Exception:
-                continue
+    fp = _find_or_fetch_font()
+    if fp and os.path.exists(fp):
+        try:
+            pdfmetrics.registerFont(TTFont("NotoSansTC", fp))
+            return "NotoSansTC"
+        except Exception:
+            pass
     return "Helvetica"
 
 def _paint_header_footer(c, font_name, footer_text):

@@ -1,18 +1,57 @@
 
-import os
+import os, pathlib, urllib.request
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 
-try:
-    for p in ["NotoSansTC-Regular.ttf", "./NotoSansTC-Regular.ttf", "assets/NotoSansTC-Regular.ttf"]:
-        if os.path.exists(p):
-            font_manager.fontManager.addfont(p)
-            plt.rcParams['font.family'] = 'Noto Sans TC'
-            break
-    plt.rcParams['axes.unicode_minus'] = False
-except Exception:
-    pass
+CANDIDATE_NAMES = [
+    "NotoSansTC-Regular.ttf",
+    "NotoSansTC-Regular.otf",
+    "NotoSansCJKtc-Regular.otf",
+    "NotoSansCJKtc-Regular.ttf",
+]
+
+DOWNLOAD_URLS = [
+    "https://github.com/googlefonts/noto-cjk/raw/main/Sans/TTF/TraditionalChinese/NotoSansTC-Regular.ttf",
+    "https://github.com/googlefonts/noto-cjk/raw/main/Sans/OTF/TraditionalChinese/NotoSansTC-Regular.otf",
+    "https://github.com/googlefonts/noto-cjk/raw/main/Sans/TTF/TraditionalChinese/NotoSansCJKtc-Regular.ttf",
+]
+
+def _find_or_fetch_font() -> str | None:
+    here = pathlib.Path(__file__).resolve()
+    roots = [here.parent, here.parent.parent, pathlib.Path.cwd()]
+    for r in roots:
+        for name in CANDIDATE_NAMES:
+            p = r / name
+            if p.exists():
+                return str(p)
+
+    cache_dir = pathlib.Path(".fonts")
+    cache_dir.mkdir(exist_ok=True)
+    for url in DOWNLOAD_URLS:
+        try:
+            target = cache_dir / url.split("/")[-1]
+            if not target.exists():
+                urllib.request.urlretrieve(url, target)
+            if target.exists():
+                return str(target)
+        except Exception:
+            continue
+    return None
+
+def _apply_font():
+    try:
+        fp = _find_or_fetch_font()
+        if fp and os.path.exists(fp):
+            font_manager.fontManager.addfont(fp)
+            plt.rcParams["font.family"] = font_manager.FontProperties(fname=fp).get_name()
+        else:
+            plt.rcParams["font.family"] = ["PingFang TC", "Microsoft JhengHei", "Arial Unicode MS"]
+        plt.rcParams["axes.unicode_minus"] = False
+    except Exception:
+        pass
+
+_apply_font()
 
 def radar_plot(scores: dict):
     labels = list(scores.keys())

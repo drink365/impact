@@ -21,14 +21,12 @@ def brand_header(subtitle: str = ""):
         )
     st.divider()
 
-
 def render_sidebar_nav():
-    """Hide default Pages list and render Chinese-labeled navigation."""
+    """Hide Streamlit default Pages nav then render Chinese labels."""
     st.markdown(
         """
         <style>
-        /* Hide Streamlit's built-in multipage nav */
-        [data-testid="stSidebarNav"] { display: none !important; }
+        [data-testid="stSidebarNav"], .stSidebarNav, .css-1d391kg, nav[aria-label="Main menu"], [data-testid="stSidebarNavItems"] { display: none !important; }
         </style>
         """,
         unsafe_allow_html=True,
