@@ -1,8 +1,9 @@
 import streamlit as st
+from utils.ui import brand_header
 
 st.set_page_config(
     page_title="影響力傳承平台｜家族影響力指數",
-    page_icon="🏛️",
+    page_icon="logo2.png",
     layout="wide",
 )
 
@@ -28,7 +29,7 @@ st.markdown(
 )
 
 # --------- Header ---------
-st.title("🏛️ 影響力傳承平台 | 永傳家族辦公室")
+brand_header("讓家族對話更自然，讓傳承規劃更清晰")
 st.caption("以人為本｜情感 × 風險 × 信任｜陪您把重要的事說清楚、做紮實")
 
 with st.container():

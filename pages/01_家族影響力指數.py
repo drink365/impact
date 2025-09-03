@@ -5,12 +5,13 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
+from utils.ui import brand_header
 from utils.scoring import compute_family_impact_scores, interpret_scores
 from utils.charts import radar_plot
 
 st.set_page_config(page_title="家族影響力指數", page_icon="🧭", layout="wide")
 
-st.title("🧭 家族影響力指數（Family Legacy Impact Index）")
+brand_header("🧭 家族影響力指數（Family Legacy Impact Index）")
 st.caption("匿名作答｜約 3 分鐘｜結果僅在此裝置計算與顯示")
 
 with st.expander("為什麼做這份測驗？", expanded=False):
